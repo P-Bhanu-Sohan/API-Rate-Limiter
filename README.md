@@ -27,7 +27,7 @@ Before running this application, ensure you have the following installed:
 To get the entire application stack up and running, navigate to the project root directory and use Docker Compose:
 
 ```bash
-cd /Users/kishorepingali/Desktop/rate-limiter-spring/
+../rate-limiter-spring/
 docker-compose up --build
 ```
 
@@ -48,7 +48,7 @@ This command will:
 To stop all running services and remove their containers, networks, and volumes:
 
 ```bash
-cd /Users/kishorepingali/Desktop/rate-limiter-spring/
+../rate-limiter-spring/
 docker-compose down
 ```
 
