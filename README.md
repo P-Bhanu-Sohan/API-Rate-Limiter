@@ -11,66 +11,46 @@ This project demonstrates a simple rate limiting mechanism implemented using Spr
 *   **Frontend (HTML/CSS/JavaScript):**
     *   A retro ASCII-themed web interface to interact with the rate limiter.
     *   Buttons to send single requests or a burst of 100 requests.
+    *   Served via Nginx within a Docker container.
 *   **Producer (Java):**
     *   A standalone Java application to simulate high-volume requests to the rate limiter.
+    *   Runs as a Docker container.
 
 ## Prerequisites
 
 Before running this application, ensure you have the following installed:
 
-*   **Java Development Kit (JDK) 11 or higher:** Required for both the Spring Boot backend and the Java producer.
-*   **Maven or Gradle:** For building the Spring Boot backend. (This README assumes Maven for build commands).
-*   **Docker and Docker Compose:** To easily set up and run the Redis server.
+*   **Docker and Docker Compose:** Essential for building and running all services.
 
 ## Setup and Running
 
-Follow these steps to get the application running:
-
-### 1. Start Redis
-
-The backend uses Redis for rate limiting. You can start a Redis instance using Docker Compose:
+To get the entire application stack up and running, navigate to the project root directory and use Docker Compose:
 
 ```bash
 cd /Users/kishorepingali/Desktop/rate-limiter-spring/
-docker-compose up -d redis
+docker-compose up --build
 ```
 
-This command will start a Redis container in the background.
+This command will:
+1.  Build the Docker images for the `backend` and `producer` services.
+2.  Start the `redis` service.
+3.  Start the `backend` service, linked to Redis.
+4.  Start the `frontend` service (Nginx serving `index.html`).
+5.  Start the `producer` service, which will automatically send requests to the backend.
 
-### 2. Build and Run the Backend
+### Accessing the Application
 
-Navigate to the `backend` directory, build the Spring Boot application, and then run it:
+*   **Frontend:** Open your web browser and navigate to `http://localhost:8081`.
+*   **Backend API:** The backend API is accessible internally within the Docker network. If you need to access it directly from your host (e.g., for testing with Postman), it's exposed on `http://localhost:8080`.
+
+### Stopping the Application
+
+To stop all running services and remove their containers, networks, and volumes:
 
 ```bash
-cd /Users/kishorepingali/Desktop/rate-limiter-spring/backend
-./mvnw clean install # Or `gradlew clean build` if using Gradle
-java -jar target/rate-limiter-0.0.1-SNAPSHOT.jar # Adjust JAR name if different
+cd /Users/kishorepingali/Desktop/rate-limiter-spring/
+docker-compose down
 ```
-
-The backend application will start on `http://localhost:8080`.
-
-### 3. Access the Frontend
-
-Open the `index.html` file in your web browser:
-
-```bash
-# From the project root directory
-open frontend/index.html
-```
-
-You can use the buttons on this page to send requests to the backend and observe the rate limiting in action.
-
-### 4. Run the Producer (Optional)
-
-To simulate a high volume of requests, you can run the `SimulateProducer` application:
-
-```bash
-cd /Users/kishorepingali/Desktop/rate-limiter-spring/producer
-javac SimulateProducer.java
-java SimulateProducer
-```
-
-This will send 10 requests to the `/api/ping` endpoint with a 1-second delay between each request. You can modify `SimulateProducer.java` to send more requests or adjust the delay.
 
 ## Rate Limiting Logic
 
