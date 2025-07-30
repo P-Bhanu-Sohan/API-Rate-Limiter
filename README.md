@@ -1,4 +1,4 @@
-# Rate Limiter Spring Boot Application
+# Rate Limiter Spring Boot Application - WORK IN PROGRESS (System Design Practice)
 
 This project demonstrates a simple rate limiting mechanism implemented using Spring Boot and Redis, featuring a sliding window algorithm. It includes a backend API, a basic frontend for interaction, and a producer to simulate traffic.
 
